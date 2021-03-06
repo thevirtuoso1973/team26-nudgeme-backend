@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Map Visualization</title>
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+        <meta content="" name="keywords">
+        <meta content="" name="description">
+        <style>
+            /* Set the size of the div element that contains the map */
+            #map {
+                height: 600px;
+                width: 100%;
+            }
+        </style>
+        <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+    </head>
+    <body>
+        <header><h1>NudgeMe - Wellbeing Visualization</h1></header>
+        <p>Click on a region to see the breakdown of average scores.</p>
+        <div id="map"></div>
+        <details>
+            <summary>Map Legend</summary>
+            <div id="legend" style="display: table-cell">
+                <canvas id="myCanvas0" width="60" height="30" style="border:1px solid #000000";></canvas>
+                <p>Well-Being Score x &lt 2.5 </p>
+                <canvas id="myCanvas1" width="60" height="30" style="border:1px solid #000000";></canvas>
+                <p>Well-Being Score  2.5 &lt x &lt 5.0 </p>
+                <canvas id="myCanvas2" width="60" height="30" style="border:1px solid #000000";></canvas>
+                <p>Well-Being Score  5.0 &lt x &lt 7.5 </p>
+                <canvas id="myCanvas3" width="60" height="30" style="border:1px solid #000000";></canvas>
+                <p>Well-Being Score x &gt 7.5 </p>
+            </div>
+        </details>
+        <p><i>Data will only be shown if there's sufficient data in the database to be shown.</i></p>
+        <div class="content">
+            <div id="postcode-txt" align="center"> </div>
+            <div id="heading-txt" align="center"> </div>
+            <table id="myTable" border="1" bordercolor="grey" align="center">
+            </table>
+        </div>
+        <script>
+            function initMap() {
+                var mapData = JSON.parse({{.MAPDATA}});
+                var databaseSupportCode = JSON.parse({{.SUPCODE}});
+
+                map = new google.maps.Map(document.getElementById('map'), {
+                    center: { lat: 52.3030557, lng: -3.6559021 },
+                    zoom: 9
+                });
+
+                var sampleArray = ['E', 'EN', 'EC', 'N', 'NW', 'SE', 'SW', 'W', 'WC', 'LL', 'SY','LD', 'SA', 'CF', 'NP']
+
+                function loadOutline() {
+                    for (var i = 0; i < sampleArray.length; i++) {
+                        fileName = sampleArray[i]
+
+                        var start = "/Postcode_Polygons/LONDON/".concat(fileName)
+                        var fullFile = start.concat(".geojson")
+                        map.data.loadGeoJson(fullFile)
+                    }
+                }
+                loadOutline();
+                var myMap = new Map();
+                for (var i = 0; i < mapData.length; i++) {
+                    myMap.set(mapData[i].name, { 'avgscore': mapData[i].avgscore});
+                }
+                const colors = ["#DC2C25", "#E06B51", "#FBAD90", "#FFE6DA"];
+                map.data.setStyle(function (feature) {
+                    var name = feature.getProperty('name');
+                    if (myMap.has(name)) {
+                        for (var i = 0; i < databaseSupportCode.length; i++) {
+                            if (databaseSupportCode[i].entries >= '2' && databaseSupportCode[i].name == name) {
+                                var number = myMap.get(name).avgscore;
+                                var color = colors[0];
+                                if (number > 2.5) {
+                                    color = colors[1];
+                                }
+                                if (number > 5) {
+                                    color = colors[2];
+                                }
+                                if (number > 7.5) {
+                                    color = colors[3];
+                                }
+
+                                return {
+                                    fillColor: color,
+                                    strokeWeight: 0.7
+                                };
+                            }
+                        }
+                        return {
+                            fillColor: "grey",
+                            strokeWeight: 0.1
+                        };
+
+                    }
+                    else {
+                        return {
+                            fillColor: "grey",
+                            strokeWeight: 0.1
+                        }
+                    }
+                });
+
+                map.data.addListener('click', function (event) {
+                    var PostcodeName = event.feature.getProperty('name');
+                    document.getElementById('postcode-txt').textContent = "Postcode: " + PostcodeName;
+                    var nameP = PostcodeName.replace(/[0-9]/g, '');
+
+                    map.data.revertStyle();
+                    map.data.overrideStyle(event.feature, {
+                        strokeColor: 'white', strokeWeight: 2
+                    });
+
+                    var flag = false;
+                    var table = document.getElementById("myTable");
+
+                    while (table.hasChildNodes()) {
+                        table.removeChild(table.firstChild);
+                    }
+                    for (var i = 0; i < databaseSupportCode.length; i++) {
+
+                        if (databaseSupportCode[i].entries >= '2' && databaseSupportCode[i].name === PostcodeName) {
+
+                            var row = table.insertRow(0);
+                            var cell1 = row.insertCell(0);
+                            var cell2 = row.insertCell(1);
+                            cell1.innerHTML = databaseSupportCode[i].score.toFixed(2);
+                            cell2.innerHTML = databaseSupportCode[i].supportcode;
+                            flag = true;
+
+                            document.getElementById('heading-txt').textContent = "";
+                        }
+
+
+                    }
+                    if (table.hasChildNodes()) {
+                        var header = table.createTHead();
+                        var row = header.insertRow(0);
+                        var cell1 = row.insertCell(0);
+                        var cell2 = row.insertCell(1);
+                        cell1.innerHTML = "Well-Being Score";
+                        cell2.innerHTML = "Support Code";
+                    }
+                    if (flag == false) {
+                        document.getElementById('heading-txt').textContent = "No Data Collected";
+
+                    }
+
+                });
+                for (var i = 0; i < colors.length ; i++) {
+                    var canvas = document.getElementById('myCanvas' + i);
+                    var ctx = canvas.getContext("2d");
+                    ctx.fillStyle = colors[i];
+                    ctx.fillRect(0, 0, 60, 30);
+
+                }
+            }
+        </script>
+        <!--Google Maps API Key-->
+        <script async defer
+                src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBdqIiuveDEBH7tHvuNnNL4v_Ej9cG6ov4&callback=initMap"></script>
+    </body>
+</html>

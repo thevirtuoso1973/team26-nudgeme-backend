@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>Add to Network</title>
+        <link rel="stylesheet" href="https://fonts.xz.style/serve/inter.css">
+        <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@exampledev/new.css@1.1.2/new.min.css">
+        <!-- Usability improvement: This makes it look better on mobile. -->
+        <meta content="width=device-width, initial-scale=1.0" name="viewport">
+    </head>
+    <body>
+        <header><h1>NudgeMe - Add to Network</h1></header>
+        <p>
+            <b>
+                The person who sent this to you wants you to add them to your
+                NudgeMe support network.
+            </b>
+        </p>
+        <p>
+            Your support network is a list of people that you would be willing
+            to share your wellbeing diary with.
+        </p>
+        <p>
+            <b>
+                Click the button to add them. Once you’ve both added each other,
+                you will be able to share your wellbeing diaries with each other.
+                You can also set each other step goals.
+            </b>
+        </p>
+        <p>
+            Sharing your wellbeing diary can help you start conversations
+            about your mental wellbeing with people in your life.
+        </p>
+        <!-- Usability improvement: this doesn't require JavaScript to work. -->
+        <a href="nudgeme://addFriend?identifier={{ .Identifier }}&pubKey={{ .PubKey }}">
+            <button>Add to Network</button>
+        </a>
+    </body>
+</html>
