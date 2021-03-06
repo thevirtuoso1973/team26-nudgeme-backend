@@ -1,4 +1,4 @@
-module carefulai.com/team26/goviz
+module carefulai.com/team26/nudgeme
 
 go 1.15
 

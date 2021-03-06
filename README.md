@@ -15,20 +15,21 @@ You need an installation of `go`, using your package manager. You can verify
 you have it with `go version`.
 
 Follow these steps on the Linode server:
-- Copy the latest code into ct's home directory in 'team26-goviz/'.
-- `go build` in that project directory (team26-goviz/)
-- Restart the systemd service with `sudo systemctl restart goviz`
+- Clone or pull the repo into your home directory.
+- `cd` into `team26-nudgeme-backend` and `go build` in that project directory.
+- Start with `sudo systemdctl start nudgeme` or restart the systemd service with
+`sudo systemctl restart nudgeme`, *if it is not the first time running*.
 
 Of course, this can be done on any server, but you'd need to set up your own
-`goviz.service` file.
+`nudgeme.service` file.
 
-You can modify the goviz.service just like any systemd service, e.g. if you want to change
+You can modify the nudgeme.service just like any systemd service, e.g. if you want to change
 where it searches for the binary.
-The service config/unit file is located in `/lib/systemd/system/goviz.service`.
+The service config file is located in `/lib/systemd/system/nudgeme.service`.
 
 Current domain that links to the server:
 `https://comp0016.cyberchris.xyz/`.
-This is retrieved from the environment variable in the `goviz.service` file.
+This is retrieved from the environment variable in the `nudgeme.service` file.
 
 ## API Docs
 
