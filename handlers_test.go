@@ -17,17 +17,20 @@ type FakeDB struct {
 }
 
 func TestCheckUserExists(t *testing.T) {
+	// set up the values and mocked object:
 	identifier := "existing"
 	body := "{\"identifier\":\"" + identifier + "\"}"
 	fakeDB := new(FakeDB)
 	fakeDB.On("DoesUserExist", identifier).Return(true, nil)
 
+	// set up the fake request, and a recorder
 	e := echo.New()
 	req := httptest.NewRequest(http.MethodPost, "/", strings.NewReader(body))
 	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
 	rec := httptest.NewRecorder()
 	c := e.NewContext(req, rec)
 
+	// perform the assertions, verify assumptions
 	if assert.NoError(t, handleCheckUser(fakeDB)(c)) {
 		fakeDB.AssertExpectations(t)
 
@@ -77,6 +80,28 @@ func TestAddUser(t *testing.T) {
 
 		assert.Equal(t, http.StatusOK, rec.Code)
 		assert.Contains(t, rec.Body.String(), "\"success\":true")
+	}
+}
+
+func TestDoesNotAddExistingUser(t *testing.T) {
+	identifier := "user"
+	password := "battery horse staple"
+	body := "{\"identifier\":\"" + identifier + "\", \"password\": \""+ password +"\"}"
+
+	fakeDB := new(FakeDB)
+	fakeDB.On("DoesUserExist", identifier).Return(true, nil)
+
+	req := httptest.NewRequest(http.MethodPost, "/user/new", strings.NewReader(body))
+	req.Header.Set(echo.HeaderContentType, echo.MIMEApplicationJSON)
+	rec := httptest.NewRecorder()
+	c := echo.New().NewContext(req, rec)
+
+	if assert.NoError(t, handleAddUser(fakeDB)(c)) {
+		fakeDB.AssertExpectations(t)
+		fakeDB.AssertNotCalled(t, "InsertUser", identifier, mock.AnythingOfType("[]uint8"))
+
+		assert.Equal(t, http.StatusBadRequest, rec.Code)
+		assert.Contains(t, rec.Body.String(), "\"success\":false")
 	}
 }
 
