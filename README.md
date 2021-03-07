@@ -1,5 +1,7 @@
 # Team 26's Back-end Go Server
 
+[![Go](https://github.com/thevirtuoso1973/team26-nudgeme-backend/actions/workflows/go.yml/badge.svg)](https://github.com/thevirtuoso1973/team26-nudgeme-backend/actions/workflows/go.yml)
+
 This was initially started as a rewrite of the previous (node.js) back-end since I anticipated
 we would need to write some back-end code for some extra features. As expected,
 we did, and the back-end now holds the code for three parts:
