@@ -13,7 +13,7 @@ sending step goals)
 
 ## Deployment Guide & Usage
 
-You need an installation of `go`, using your package manager. You can verify
+You need an installation of `go` (use your package manager, or otherwise). You can verify
 you have it with `go version`.
 
 Follow these steps on the Linode server:
