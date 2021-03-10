@@ -33,6 +33,33 @@ Current domain that links to the server:
 `https://comp0016.cyberchris.xyz/`.
 This is retrieved from the environment variable in the `nudgeme.service` file.
 
+### Example `nudgeme.service` file
+
+This is the service file currently in use on the Linode server, except in the
+actual file I use the actual password instead of '$PASSWORD' as below.
+
+Also note the domain name variable, this would need to be changed with a 
+new domain name.
+
+```
+[Unit]
+Description=back-end for NudgeMe
+Documentation=https://github.com/thevirtuoso1973/team26-nudgeme-backend
+After=network.target
+
+[Service]
+WorkingDirectory=/home/ct/team26-nudgeme-backend
+Type=simple
+User=root
+ExecStart=/home/ct/team26-nudgeme-backend/nudgeme
+Restart=on-failure
+Environment="SQL_PASSWORD=$PASSWORD"
+Environment="DOMAIN_NAME=comp0016.cyberchris.xyz"
+
+[Install]
+WantedBy=multi-user.target
+```
+
 ## API Docs
 
 See the `WellbeingRecord` struct in `models.go` for the latest. Fields that are marked `omitempty`
