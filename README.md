@@ -175,7 +175,11 @@ See .../user/message section.
 
 See .../user/message/new section.
 
-## UML Diagram of internal database
+## UML Diagram of Database Interface
 
 ![image](https://user-images.githubusercontent.com/46009390/111036466-3b5d0c00-8417-11eb-954e-d84d13f0a195.png)
+
+## ER Diagram/Schema of Back-end Database
+
+![image](https://user-images.githubusercontent.com/46009390/111037852-dfe24c80-841d-11eb-8b73-bce6b650202f.png)
 
