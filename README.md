@@ -174,3 +174,8 @@ See .../user/message section.
 #### .../user/nudge/new
 
 See .../user/message/new section.
+
+## UML Diagram of internal database
+
+![image](https://user-images.githubusercontent.com/46009390/111036466-3b5d0c00-8417-11eb-954e-d84d13f0a195.png)
+
