@@ -183,3 +183,8 @@ See .../user/message/new section.
 
 ![image](https://user-images.githubusercontent.com/46009390/111037852-dfe24c80-841d-11eb-8b73-bce6b650202f.png)
 
+## Performance
+
+Our website visualization is on the left.
+![image](https://user-images.githubusercontent.com/46009390/111151761-ce1cb880-8587-11eb-8844-008fc808297f.png)
+
