@@ -17,6 +17,7 @@ You need an installation of `go` (use your package manager, or otherwise). You c
 you have it with `go version`.
 
 Follow these steps on the Linode server:
+
 - Clone or pull the repo into your home directory.
 - `cd` into `team26-nudgeme-backend` and `go build` in that project directory.
 - Start with `sudo systemdctl start nudgeme` or restart the systemd service with
@@ -66,7 +67,7 @@ WantedBy=multi-user.target
 ## API Docs
 
 See the `WellbeingRecord` struct in `models.go` for the latest. Fields that are marked `omitempty`
-are intended to be optional in the future, e.g. weeklySteps (so one doesn't need a pedometer).
+are intended to be optional in the future, e.g. weeklySteps.
 
 ### Wellbeing Data & Steps for Map
 
@@ -138,7 +139,11 @@ Request example:
 Response example:
 
 ``` json
-[{"identifier_from":"blahblah", "data":"123"}, {"identifier_from":"blahblah2", "data":"1234"}, ...]
+[
+{"identifier_from":"blahblah", "data":"123"},
+{"identifier_from":"blahblah2", "data":"1234"},
+...
+]
 ```
 
 #### .../user/message/new
@@ -188,6 +193,7 @@ See .../user/message/new section.
 
 ## Performance
 
-Our website visualization is on the left.
+We used GTmetrix to test the performance of the visualisation.
+
 ![image](https://user-images.githubusercontent.com/46009390/111151761-ce1cb880-8587-11eb-8844-008fc808297f.png)
 
